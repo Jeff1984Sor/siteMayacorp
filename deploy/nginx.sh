@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Configura o Nginx (e o HTTPS, se o DNS já apontar para este servidor) — rodar como root:
-#   bash /home/deploy/mayacorp-site/deploy/nginx.sh <PORTA>
+#   sudo bash /home/deploy/mayacorp-site/deploy/nginx.sh <PORTA>
 # Só cria o arquivo do mayacorp.com.br; não altera os sites existentes.
 set -euo pipefail
 
@@ -8,7 +8,7 @@ PORT="${1:?informe a porta, ex.: bash nginx.sh 3010}"
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
 CONF=/etc/nginx/sites-available/mayacorp.com.br
 
-[ "$(id -u)" -eq 0 ] || { echo "ERRO: rode como root."; exit 1; }
+[ "$(id -u)" -eq 0 ] || { echo "ERRO: rode com sudo."; exit 1; }
 command -v nginx >/dev/null || { echo "ERRO: Nginx não encontrado."; exit 1; }
 
 if grep -rqs "server_name[^;]*mayacorp\.com\.br" /etc/nginx/sites-enabled/ /etc/nginx/conf.d/ \

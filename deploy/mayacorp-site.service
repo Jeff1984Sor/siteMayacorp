@@ -1,0 +1,15 @@
+[Unit]
+Description=MayaCorp Site (Next.js) — porta __PORT__
+After=network.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__DIR__
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/env node __DIR__/node_modules/next/dist/bin/next start -p __PORT__ -H 127.0.0.1
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

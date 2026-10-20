@@ -15,8 +15,7 @@ src/
     interesses.ts         ← opções do select do formulário
   lib/                    configurações do site, e-mail, rate limit, schema do formulário
 public/logo.svg           logo (para usar o arquivo, ative USE_LOGO_FILE em src/components/logo.tsx)
-deploy/nginx/             server block do Nginx
-ecosystem.config.cjs      configuração do PM2
+deploy/                   instalar.sh, nginx.sh, unit systemd e server block do Nginx
 ```
 
 ## Variáveis de ambiente
@@ -24,26 +23,30 @@ ecosystem.config.cjs      configuração do PM2
 Copie `.env.example` para `.env` e preencha o SMTP. Sem SMTP, o formulário abre o e-mail do visitante
 (`mailto:mayacorp@mayacorp.com.br`) com assunto e corpo pré-preenchidos.
 
-## Deploy (VPS, usuário `deploy`)
+## Deploy (VPS, usuário `deploy`, systemd)
 
-1. Como **deploy** — clona/atualiza, escolhe uma porta livre (a partir da 3010), builda e sobe no PM2:
+Segue o padrão do servidor: um serviço systemd por app (`mayacorp-site.service`), Nginx na frente.
+
+1. Como **deploy** — clona/atualiza, escolhe uma porta livre (a partir da 3010), builda e
+   instala/reinicia o serviço systemd (pede a senha do sudo):
 
    ```bash
    bash <(curl -fsSL https://raw.githubusercontent.com/Jeff1984Sor/siteMayacorp/main/deploy/instalar.sh)
    ```
 
-2. Preencha o SMTP em `/home/deploy/mayacorp-site/.env` e rode `pm2 restart mayacorp-site --update-env`.
+2. Preencha o SMTP em `/home/deploy/mayacorp-site/.env` e rode `sudo systemctl restart mayacorp-site`.
 
-3. Como **root** — cria o server block do Nginx (testa com `nginx -t` antes de recarregar) e,
-   se o DNS já apontar para o servidor, emite o HTTPS com Certbot:
+3. Nginx (testa com `nginx -t` antes de recarregar) e, se o DNS já apontar para o servidor, HTTPS com Certbot:
 
    ```bash
-   bash /home/deploy/mayacorp-site/deploy/nginx.sh <PORTA>
+   sudo bash /home/deploy/mayacorp-site/deploy/nginx.sh <PORTA>
    ```
 
 ## Como atualizar
 
-Como `deploy`, rode o mesmo `instalar.sh` do passo 1 (faz `git pull`, build e `pm2 restart mayacorp-site`).
+Como `deploy`, rode o mesmo `instalar.sh` do passo 1 (faz `git pull`, build e `systemctl restart mayacorp-site`).
+
+Logs: `sudo journalctl -u mayacorp-site -f`
 
 ## Testes rápidos
 
