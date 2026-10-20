@@ -24,35 +24,26 @@ ecosystem.config.cjs      configuração do PM2
 Copie `.env.example` para `.env` e preencha o SMTP. Sem SMTP, o formulário abre o e-mail do visitante
 (`mailto:mayacorp@mayacorp.com.br`) com assunto e corpo pré-preenchidos.
 
-## Primeiro deploy (servidor)
+## Deploy (VPS, usuário `deploy`)
 
-```bash
-cd /home/mayacorp22
-git clone https://github.com/Jeff1984Sor/siteMayacorp.git mayacorp-site
-cd mayacorp-site
-cp .env.example .env && nano .env        # SMTP e porta
-npm install                              # gera o package-lock.json (depois use npm ci)
-npm run check:termos
-npm run build
-pm2 start ecosystem.config.cjs && pm2 save
+1. Como **deploy** — clona/atualiza, escolhe uma porta livre (a partir da 3010), builda e sobe no PM2:
 
-sudo cp deploy/nginx/mayacorp.com.br.conf /etc/nginx/sites-available/mayacorp.com.br
-sudo ln -s /etc/nginx/sites-available/mayacorp.com.br /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
+   ```bash
+   bash <(curl -fsSL https://raw.githubusercontent.com/Jeff1984Sor/siteMayacorp/main/deploy/instalar.sh)
+   ```
 
-# só depois de confirmar que o DNS aponta para o IP do servidor:
-sudo certbot --nginx -d mayacorp.com.br -d www.mayacorp.com.br --redirect
-```
+2. Preencha o SMTP em `/home/deploy/mayacorp-site/.env` e rode `pm2 restart mayacorp-site --update-env`.
+
+3. Como **root** — cria o server block do Nginx (testa com `nginx -t` antes de recarregar) e,
+   se o DNS já apontar para o servidor, emite o HTTPS com Certbot:
+
+   ```bash
+   bash /home/deploy/mayacorp-site/deploy/nginx.sh <PORTA>
+   ```
 
 ## Como atualizar
 
-```bash
-cd /home/mayacorp22/mayacorp-site
-git pull
-npm ci
-npm run build
-pm2 restart mayacorp-site
-```
+Como `deploy`, rode o mesmo `instalar.sh` do passo 1 (faz `git pull`, build e `pm2 restart mayacorp-site`).
 
 ## Testes rápidos
 
