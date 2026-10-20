@@ -28,8 +28,17 @@ systemctl reload nginx
 echo "Nginx recarregado."
 
 IP=$(curl -fsS https://api.ipify.org || hostname -I | awk '{print $1}')
-DNS=$(getent ahostsv4 mayacorp.com.br | awk 'NR==1{print $1}' || true)
-DNS_WWW=$(getent ahostsv4 www.mayacorp.com.br | awk 'NR==1{print $1}' || true)
+# Consulta o DNS público (o cache local do servidor pode guardar a resposta antiga)
+resolver() {
+  if command -v dig >/dev/null; then
+    dig +short A "$1" @8.8.8.8 | grep -E '^[0-9.]+$' | tail -1
+  else
+    resolvectl flush-caches 2>/dev/null || true
+    getent ahostsv4 "$1" | awk 'NR==1{print $1}'
+  fi
+}
+DNS=$(resolver mayacorp.com.br || true)
+DNS_WWW=$(resolver www.mayacorp.com.br || true)
 echo "IP do servidor: $IP | mayacorp.com.br -> ${DNS:-sem registro} | www -> ${DNS_WWW:-sem registro}"
 
 if [ "$DNS" = "$IP" ] && [ "$DNS_WWW" = "$IP" ]; then
