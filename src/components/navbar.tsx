@@ -92,7 +92,7 @@ export function Navbar() {
                     {PRODUTOS.map((p) => {
                       const Icon = p.icon;
                       return (
-                        <li key={p.slug}>
+                        <li key={p.slug} className={p.destaque ? "col-span-2" : undefined}>
                           <Link
                             href={`/produtos/${p.slug}`}
                             onClick={closeAll}
@@ -105,7 +105,17 @@ export function Navbar() {
                               <Icon className="h-4 w-4" aria-hidden />
                             </span>
                             <span>
-                              <span className="block text-sm font-semibold text-ink">{p.nome}</span>
+                              <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                                {p.nome}
+                                {p.lancamento && (
+                                  <span
+                                    className="rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#0A0F1E]"
+                                    style={{ backgroundColor: p.accent }}
+                                  >
+                                    {p.lancamento}
+                                  </span>
+                                )}
+                              </span>
                               <span className="block text-xs leading-snug text-ink-muted">{p.tagline}</span>
                             </span>
                           </Link>
@@ -166,6 +176,14 @@ export function Navbar() {
                   >
                     <Icon className="h-4 w-4" style={{ color: p.accent }} aria-hidden />
                     {p.nome}
+                    {p.lancamento && (
+                      <span
+                        className="rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#0A0F1E]"
+                        style={{ backgroundColor: p.accent }}
+                      >
+                        {p.lancamento}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

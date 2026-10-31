@@ -3,7 +3,7 @@ import { EMAIL, MAILTO } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
-  description: "Como a MayaCorp trata os dados enviados pelo formulário de contato, em conformidade com a LGPD.",
+  description: "Como a MayaCorp trata os dados enviados pelo formulário de contato e pela contratação do MayaJus, em conformidade com a LGPD.",
   alternates: { canonical: "/privacidade" },
 };
 
@@ -36,6 +36,11 @@ export default function PrivacidadePage() {
               <li>interesse e mensagem.</li>
             </ul>
             <p className="mt-3">
+              Na contratação do MayaJus pelo site, coletamos também: razão social ou nome do advogado, CNPJ ou CPF, número e UF
+              da OAB, município do escritório, nome do responsável, e-mail, WhatsApp, sistema usado hoje, quantidade aproximada
+              de processos e observações.
+            </p>
+            <p className="mt-3">
               Para proteger o formulário contra abuso, o endereço IP de quem envia é usado temporariamente para limitar o
               número de envios, sem ser armazenado de forma permanente.
             </p>
@@ -45,16 +50,18 @@ export default function PrivacidadePage() {
             <h2>3. Para que usamos</h2>
             <p>
               Os dados do formulário são usados <strong className="text-ink">exclusivamente para responder ao seu contato</strong>{" "}
-              e, quando for o caso, preparar um orçamento. Não vendemos, alugamos nem compartilhamos seus dados com
-              terceiros para fins de publicidade. A base legal é o seu consentimento e o procedimento preliminar a um
-              possível contrato, a seu pedido (art. 7º, I e V, da LGPD).
+              e, quando for o caso, preparar um orçamento. Os dados do pedido do MayaJus são usados para confirmar a contratação,
+              enviar o link de pagamento, configurar a emissão de NFS-e na prefeitura do seu município e fazer a migração. Não vendemos, alugamos nem compartilhamos seus dados com
+              terceiros para fins de publicidade. A base legal é o seu consentimento e a execução de contrato ou de
+              procedimentos preliminares a ele, a seu pedido (art. 7º, I e V, da LGPD).
             </p>
           </div>
 
           <div>
             <h2>4. Por quanto tempo guardamos</h2>
             <p>
-              Mantemos as mensagens pelo tempo necessário para tratar o seu contato e o eventual relacionamento comercial.
+              Mantemos as mensagens e os pedidos pelo tempo necessário para tratar o seu contato, a contratação e o
+              relacionamento comercial, além dos prazos exigidos por lei (por exemplo, obrigações fiscais).
               Você pode pedir a exclusão a qualquer momento.
             </p>
           </div>

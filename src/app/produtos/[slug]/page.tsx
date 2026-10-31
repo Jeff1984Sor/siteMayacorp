@@ -13,14 +13,15 @@ type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
 
+// Produtos com página própria (ex.: /produtos/mayajus) ficam fora deste template.
 export function generateStaticParams() {
-  return PRODUTOS.map((p) => ({ slug: p.slug }));
+  return PRODUTOS.filter((p) => !p.paginaPropria).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = getProduto(slug);
-  if (!p) return {};
+  if (!p || p.paginaPropria) return {};
   const title = `${p.nome} — ${p.tagline}`;
   return {
     title,
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProdutoPage({ params }: Props) {
   const { slug } = await params;
   const p = getProduto(slug);
-  if (!p) notFound();
+  if (!p || p.paginaPropria) notFound();
 
   const Icon = p.icon;
   const ctaHref = `/?interesse=${p.slug}#contato`;
@@ -95,7 +96,7 @@ export default async function ProdutoPage({ params }: Props) {
                 </a>
               </div>
             </div>
-            <ProductMockup tipo={p.mockup} accent={p.accent} />
+            {p.mockup && <ProductMockup tipo={p.mockup} accent={p.accent} />}
           </div>
         </div>
       </section>

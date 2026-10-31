@@ -1,6 +1,7 @@
 // Opções do select "Interesse" do formulário de contato.
 // Os valores dos produtos são iguais aos slugs de /produtos/[slug].
 export const INTERESSES = [
+  { value: "mayajus", label: "MayaJus" },
   { value: "mayapost", label: "MayaPost" },
   { value: "mayasec", label: "MayaSec" },
   { value: "mayaassinador", label: "MayaAssinador" },

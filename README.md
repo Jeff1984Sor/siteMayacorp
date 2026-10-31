@@ -13,10 +13,23 @@ src/
     produtos.ts           ← conteúdo de TODOS os produtos (edite aqui)
     site.ts               ← textos da home (números, sob medida, etapas, diferenciais, FAQ)
     interesses.ts         ← opções do select do formulário
+    mayajus-planos.ts     ← PREÇOS E PLANOS DO MAYAJUS (único lugar para mudar valores)
+    mayajus.ts            ← textos da página do MayaJus (hero, passos da NFS-e, próximos passos)
   lib/                    configurações do site, e-mail, rate limit, schema do formulário
 public/logo.svg           logo (para usar o arquivo, ative USE_LOGO_FILE em src/components/logo.tsx)
 deploy/                   instalar.sh, nginx.sh, unit systemd e server block do Nginx
 ```
+
+## MayaJus — contratação online
+
+- Página: `/produtos/mayajus` · Checkout: `/produtos/mayajus/contratar?plano=pro&ciclo=anual` · Termos: `/produtos/mayajus/termos`
+- API: `POST /api/mayajus/pedido` — valida com Zod, **recalcula o preço no servidor** (`src/lib/mayajus-preco.ts`),
+  gera o número `MJ-AAAA-NNNN`, salva o pedido e envia e-mail para a MayaCorp e para o cliente.
+- Pedidos: em `data/pedidos-mayajus.json` (fora do git) ou no PostgreSQL se `DATABASE_URL` estiver no `.env`
+  (tabelas em `deploy/sql/mayajus-pedidos.sql`, criadas automaticamente).
+- Pagamento: `src/lib/pagamento.ts` (`PaymentProvider` + `ManualProvider`). Para plugar um gateway, implemente a interface.
+- Painel: `/admin/pedidos` (senha `ADMIN_PASSWORD` no `.env`), filtro por status, troca de status e CSV.
+- Testes: `npm test` (regras de preço e CPF/CNPJ). O `instalar.sh` roda os testes antes do build.
 
 ## Variáveis de ambiente
 
@@ -54,7 +67,7 @@ Logs: `sudo journalctl -u mayacorp-site -f`
 curl -I https://mayacorp.com.br
 curl -I https://www.mayacorp.com.br          # deve redirecionar para https://mayacorp.com.br
 curl -I http://mayacorp.com.br               # deve redirecionar para HTTPS
-for s in mayapost mayasec mayaassinador mayafit mayatrade automacao-nfse; do
+for s in mayajus mayajus/contratar mayapost mayasec mayaassinador mayafit mayatrade automacao-nfse; do
   curl -s -o /dev/null -w "%{http_code} /produtos/$s\n" https://mayacorp.com.br/produtos/$s
 done
 ```

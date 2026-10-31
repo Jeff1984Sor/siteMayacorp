@@ -9,6 +9,7 @@ export default {
         primary: { DEFAULT: "#6366F1", violet: "#8B5CF6" },
         accent: "#22D3EE",
         success: "#10B981",
+        gold: "#F5B83D",
         ink: { DEFAULT: "#F1F5F9", muted: "#94A3B8" },
       },
       fontFamily: {

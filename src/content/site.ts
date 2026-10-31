@@ -29,7 +29,7 @@ export type Stat = { valor?: number; texto?: string; prefixo?: string; sufixo?: 
 
 export const STATS: Stat[] = [
   { valor: 15, prefixo: "+", sufixo: " anos", label: "de experiência em tecnologia e atendimento" },
-  { valor: 6, sufixo: "+", label: "produtos próprios" },
+  { valor: 7, sufixo: "+", label: "produtos próprios" },
   { valor: 100, sufixo: "%", label: "em nuvem" },
   { texto: "IA", label: "em todos os produtos" },
 ];

@@ -6,13 +6,17 @@ import {
   Bell,
   Brain,
   Building2,
+  Calculator,
   Calendar,
+  CalendarDays,
   Clock,
+  Cloud,
   Cpu,
   DollarSign,
   Dumbbell,
   Eye,
   FileText,
+  FolderKanban,
   Globe,
   History,
   Layers,
@@ -21,6 +25,7 @@ import {
   Newspaper,
   Puzzle,
   Receipt,
+  Scale,
   Send,
   ShieldCheck,
   Sparkles,
@@ -30,9 +35,13 @@ import {
   Upload,
   Users,
   Wallet,
+  Workflow,
   Zap,
   type LucideIcon,
 } from "lucide-react";
+import { MAYAJUS_ACCENT } from "@/content/mayajus";
+import { PLANOS } from "@/content/mayajus-planos";
+import { formatarBRL, mensalEquivalente } from "@/lib/mayajus-preco";
 
 export type MockupTipo = "post" | "chat" | "documento" | "agenda" | "trade" | "lote";
 
@@ -45,15 +54,137 @@ export type Produto = {
   accent: string;
   bullets: string[];
   badge?: string;
+  /** Selo pintado com a cor do produto e com brilho (em vez do selo neutro). */
+  badgeDestaque?: boolean;
+  /** Fita de lançamento exibida no card da home, no menu e no hero. */
+  lancamento?: string;
   aviso?: string;
+  /** Card largo na home, com linha de preço e atalho para contratar. */
+  destaque?: { preco: string; precoNota: string; contratarHref: string; planosHref: string };
+  /** O produto tem página própria em /produtos/<slug> (fora do template [slug]). */
+  paginaPropria?: boolean;
   problema: { titulo: string; texto: string; dores: string[] };
   funcionalidades: { titulo: string; texto: string; icon: LucideIcon }[];
   paraQuem: string[];
   faq: { pergunta: string; resposta: string }[];
-  mockup: MockupTipo;
+  mockup?: MockupTipo;
 };
 
+const menorMensalAnual = Math.min(...PLANOS.map((p) => mensalEquivalente(p, "anual")));
+
 export const PRODUTOS: Produto[] = [
+  {
+    slug: "mayajus",
+    nome: "MayaJus",
+    tagline: "Gestão jurídica que fatura o honorário e emite a NFS-e",
+    descricao:
+      "Processos, prazos, clientes, financeiro e NFS-e no mesmo lugar, para escritórios de advocacia que querem crescer sem virar refém de planilha.",
+    icon: Scale,
+    accent: MAYAJUS_ACCENT,
+    badge: "Emite NFS-e",
+    badgeDestaque: true,
+    lancamento: "Lançamento do ano",
+    paginaPropria: true,
+    destaque: {
+      preco: `${formatarBRL(menorMensalAnual)}/mês`,
+      precoNota: "a partir de, no plano anual",
+      contratarHref: "/produtos/mayajus/contratar",
+      planosHref: "/produtos/mayajus#planos",
+    },
+    bullets: [
+      "Processos, prazos e agenda do escritório em um só painel",
+      "Honorário recebido vira NFS-e emitida, sem abrir o site da prefeitura",
+      "Financeiro completo e nota enviada ao cliente e ao contador",
+      "Contratação online, com migração grátis no plano anual",
+    ],
+    problema: {
+      titulo: "Escritório bom não pode depender de planilha",
+      texto:
+        "Prazo anotado em três lugares, honorário que ninguém lembrou de cobrar e nota fiscal digitada no portal da prefeitura no fim do mês.",
+      dores: [
+        "Prazos espalhados entre agenda, e-mail e planilha",
+        "Honorário recebido que ninguém lembra de faturar",
+        "Nota fiscal emitida na mão, no portal da prefeitura",
+      ],
+    },
+    funcionalidades: [
+      {
+        icon: FolderKanban,
+        titulo: "Gestão de processos e prazos",
+        texto: "Cada processo com andamentos, responsáveis e prazos visíveis para toda a equipe.",
+      },
+      {
+        icon: Users,
+        titulo: "Clientes e contratos",
+        texto: "Cadastro de clientes e contratos de honorários: fixo, por parcela ou por êxito.",
+      },
+      {
+        icon: CalendarDays,
+        titulo: "Agenda",
+        texto: "Audiências, reuniões e prazos na mesma agenda, com lembretes.",
+      },
+      {
+        icon: Wallet,
+        titulo: "Financeiro",
+        texto: "Contas a pagar e a receber, fluxo de caixa e honorários sob controle.",
+      },
+      {
+        icon: Receipt,
+        titulo: "Emissão de NFS-e",
+        texto: "Recebeu, emitiu: a nota sai automaticamente na prefeitura do seu município.",
+      },
+      {
+        icon: Calculator,
+        titulo: "Integração com o contador",
+        texto: "Notas e lançamentos disponíveis para o contador, sem troca de planilha.",
+      },
+      {
+        icon: Workflow,
+        titulo: "Automações",
+        texto: "Tarefas repetitivas rodando sozinhas: cobranças, avisos e rotinas do escritório.",
+      },
+      {
+        icon: Cloud,
+        titulo: "Na nuvem, com backup",
+        texto: "Acesse de qualquer lugar, com cópias de segurança automáticas.",
+      },
+    ],
+    paraQuem: [
+      "Advogados autônomos",
+      "Escritórios de advocacia de pequeno e médio porte",
+      "Escritórios com alto volume de honorários e notas",
+    ],
+    faq: [
+      {
+        pergunta: "Preciso de certificado digital para emitir nota?",
+        resposta:
+          "Na maioria das prefeituras, sim. A configuração do certificado e da emissão é feita junto com você na implantação: você não precisa entender de nota fiscal para começar.",
+      },
+      {
+        pergunta: "Funciona na minha cidade?",
+        resposta:
+          "Confirmamos a integração com a sua prefeitura logo depois da contratação. Por isso pedimos o município do escritório no pedido.",
+      },
+      {
+        pergunta: "Posso trocar de plano depois?",
+        resposta: "Sim, a qualquer momento. Você sobe ou desce de plano conforme o escritório muda.",
+      },
+      {
+        pergunta: "Como funciona a migração do meu sistema atual?",
+        resposta:
+          "A nossa equipe traz clientes, processos e contratos do sistema ou das planilhas que você usa hoje. No plano anual a migração é grátis; no mensal, é grátis até 200 processos, R$ 490 de 200 a 1.000 e sob orçamento acima disso.",
+      },
+      {
+        pergunta: "Tem fidelidade?",
+        resposta: "No plano mensal, não: você cancela quando quiser. O plano anual tem desconto equivalente a 2 meses grátis.",
+      },
+      {
+        pergunta: "Meus dados ficam seguros?",
+        resposta:
+          "Sim. O MayaJus roda em nuvem, com conexão criptografada, backups automáticos e tratamento de dados conforme a LGPD.",
+      },
+    ],
+  },
   {
     slug: "mayapost",
     nome: "MayaPost",

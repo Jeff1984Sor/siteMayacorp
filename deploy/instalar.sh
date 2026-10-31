@@ -39,6 +39,7 @@ fi
 echo "== Build =="
 if [ -f package-lock.json ]; then npm ci; else npm install; fi
 npm run check:termos
+npm test
 npm run build
 
 echo "== Serviço systemd =="
