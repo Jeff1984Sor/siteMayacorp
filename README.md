@@ -22,14 +22,12 @@ deploy/                   instalar.sh, nginx.sh, unit systemd e server block do 
 
 ## MayaJus — contratação online
 
-- Página: `/produtos/mayajus` · Checkout: `/produtos/mayajus/contratar?plano=pro&ciclo=anual` · Termos: `/produtos/mayajus/termos`
-- API: `POST /api/mayajus/pedido` — valida com Zod, **recalcula o preço no servidor** (`src/lib/mayajus-preco.ts`),
-  gera o número `MJ-AAAA-NNNN`, salva o pedido e envia e-mail para a MayaCorp e para o cliente.
-- Pedidos: em `data/pedidos-mayajus.json` (fora do git) ou no PostgreSQL se `DATABASE_URL` estiver no `.env`
-  (tabelas em `deploy/sql/mayajus-pedidos.sql`, criadas automaticamente).
-- Pagamento: `src/lib/pagamento.ts` (`PaymentProvider` + `ManualProvider`). Para plugar um gateway, implemente a interface.
-- Painel: `/admin/pedidos` (senha `ADMIN_PASSWORD` no `.env`), filtro por status, troca de status e CSV.
-- Testes: `npm test` (regras de preço e CPF/CNPJ). O `instalar.sh` roda os testes antes do build.
+- Página: `/produtos/mayajus`. Todo botão "Contratar" leva ao **cadastro oficial**
+  (`https://mayajus.mayacorp.com.br/cadastro?plano=pro&ciclo=anual`), com plano e ciclo já marcados.
+  Os dados vão direto para o sistema do MayaJus; o site não guarda nada.
+- `/produtos/mayajus/contratar` só redireciona para o cadastro (mantém links antigos funcionando).
+- Os preços do site ficam em `src/content/mayajus-planos.ts` — mantenha iguais aos do cadastro.
+- Testes: `npm test` (regras de preço da calculadora). O `instalar.sh` roda os testes antes do build.
 
 ## Variáveis de ambiente
 

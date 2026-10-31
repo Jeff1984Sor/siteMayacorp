@@ -1,3 +1,5 @@
+import { PLANO_DESTAQUE, getPlano, type Ciclo } from "@/content/mayajus-planos";
+
 // Textos da página do MayaJus que não estão em produtos.ts (planos e preços: mayajus-planos.ts).
 
 export const MAYAJUS_ACCENT = "#F5B83D";
@@ -31,11 +33,12 @@ export const MAYAJUS_NFSE_PASSOS = [
   },
 ];
 
-export const PROXIMOS_PASSOS = [
-  { titulo: "Pedido recebido", texto: "Seu pedido já está com a nossa equipe." },
-  { titulo: "Contato em até 1 dia útil", texto: "Confirmamos os dados e tiramos qualquer dúvida." },
-  { titulo: "Pagamento", texto: "Você recebe o link de pagamento." },
-  { titulo: "Configuração da NFS-e", texto: "Certificado digital e integração com a sua prefeitura." },
-  { titulo: "Migração", texto: "Trazemos os dados do seu sistema atual." },
-  { titulo: "Pronto pra usar", texto: "Equipe com acesso e primeira nota emitida." },
-];
+// Cadastro oficial do MayaJus: é onde a pessoa contrata (os dados vão direto para o sistema).
+// Aceita ?plano=<nome do plano em minúsculas>&ciclo=mensal|anual.
+export const MAYAJUS_CADASTRO = "https://mayajus.mayacorp.com.br/cadastro";
+
+export function linkCadastro(planoId?: string, ciclo: Ciclo = "anual"): string {
+  const plano = getPlano(planoId ?? PLANO_DESTAQUE) ?? getPlano(PLANO_DESTAQUE);
+  const q = new URLSearchParams({ plano: (plano?.nome ?? "").toLowerCase(), ciclo });
+  return `${MAYAJUS_CADASTRO}?${q}`;
+}

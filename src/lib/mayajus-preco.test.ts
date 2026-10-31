@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getPlano, type Plano } from "@/content/mayajus-planos";
-import { calcularPedido, custoDoPlano, formatarBRL, mensalEquivalente, recomendarPlano } from "@/lib/mayajus-preco";
+import { custoDoPlano, formatarBRL, mensalEquivalente, recomendarPlano } from "@/lib/mayajus-preco";
 
 const plano = (id: string) => getPlano(id) as Plano;
 const rec = (usuarios: number, notas: number, ciclo: "mensal" | "anual" = "mensal") =>
@@ -101,35 +101,6 @@ describe("recomendarPlano — viradas por notas", () => {
     expect(r.recomendado.plano.id).toBe("ilimitado");
     expect(r.virada?.comparadoCom.id).toBe("solo");
     expect(r.virada?.diferenca).toBe(119);
-  });
-});
-
-describe("calcularPedido", () => {
-  it("anual com adicionais: total do ano, equivalente mensal e economia", () => {
-    const p = calcularPedido({ plano: plano("pro"), ciclo: "anual", usuariosAdicionais: 2, faixaProcessos: "200a1000" });
-    expect(p.valorPlano).toBe(5490);
-    expect(p.valorAdicionais).toBe(1197.6);
-    expect(p.totalCiclo).toBe(6687.6);
-    expect(p.totalMensal).toBe(557.3);
-    expect(p.economia).toBe(1098);
-    expect(p.migracaoStatus).toBe("gratis");
-    expect(p.migracao).toBe(0);
-  });
-
-  it("mensal: migração conforme a faixa", () => {
-    const base = { plano: plano("escritorio"), ciclo: "mensal" as const, usuariosAdicionais: 0 };
-    expect(calcularPedido({ ...base, faixaProcessos: "ate200" }).migracaoStatus).toBe("gratis");
-    const media = calcularPedido({ ...base, faixaProcessos: "200a1000" });
-    expect(media.migracao).toBe(490);
-    expect(media.totalCiclo).toBe(279);
-    expect(media.economia).toBe(0);
-    expect(calcularPedido({ ...base, faixaProcessos: "acima1000" }).migracaoStatus).toBe("orcamento");
-    expect(calcularPedido({ ...base, faixaProcessos: null }).migracaoStatus).toBe("nao-se-aplica");
-  });
-
-  it("ignora quantidade negativa ou fracionada de adicionais", () => {
-    expect(calcularPedido({ plano: plano("solo"), ciclo: "mensal", usuariosAdicionais: -3, faixaProcessos: null }).totalCiclo).toBe(119);
-    expect(calcularPedido({ plano: plano("solo"), ciclo: "mensal", usuariosAdicionais: 1.9, faixaProcessos: null }).totalCiclo).toBe(168.9);
   });
 });
 

@@ -88,31 +88,12 @@ export const PLANO_DESTAQUE: PlanoId = "escritorio";
 // Migração de dados do sistema atual
 export type FaixaProcessos = "ate200" | "200a1000" | "acima1000";
 
-export const FAIXAS_PROCESSOS: { id: FaixaProcessos; label: string }[] = [
-  { id: "ate200", label: "Até 200 processos" },
-  { id: "200a1000", label: "De 200 a 1.000 processos" },
-  { id: "acima1000", label: "Mais de 1.000 processos" },
-];
-
 /** Preço da migração no plano mensal. `null` = sob orçamento. No anual é sempre grátis. */
 export const MIGRACAO_MENSAL: Record<FaixaProcessos, number | null> = {
   ate200: 0,
   "200a1000": 490,
   acima1000: null,
 };
-
-export const SISTEMAS_ATUAIS = [
-  "Nenhum",
-  "Planilhas",
-  "Projuris",
-  "Astrea",
-  "ADVBOX",
-  "Legal One",
-  "CPJ",
-  "Themis",
-  "Easyjur",
-  "Outro",
-] as const;
 
 export function getPlano(id: string): Plano | undefined {
   return PLANOS.find((p) => p.id === id);

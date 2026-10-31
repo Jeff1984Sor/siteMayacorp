@@ -39,7 +39,7 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { MAYAJUS_ACCENT } from "@/content/mayajus";
+import { MAYAJUS_ACCENT, linkCadastro } from "@/content/mayajus";
 import { PLANOS } from "@/content/mayajus-planos";
 import { formatarBRL, mensalEquivalente } from "@/lib/mayajus-preco";
 
@@ -88,14 +88,14 @@ export const PRODUTOS: Produto[] = [
     destaque: {
       preco: `${formatarBRL(menorMensalAnual)}/mês`,
       precoNota: "a partir de, no plano anual",
-      contratarHref: "/produtos/mayajus/contratar",
+      contratarHref: linkCadastro(),
       planosHref: "/produtos/mayajus#planos",
     },
     bullets: [
       "Processos, prazos e agenda do escritório em um só painel",
       "Honorário recebido vira NFS-e emitida, sem abrir o site da prefeitura",
       "Financeiro completo e nota enviada ao cliente e ao contador",
-      "Contratação online, com migração grátis no plano anual",
+      "Contratação online com teste grátis e migração grátis no anual",
     ],
     problema: {
       titulo: "Escritório bom não pode depender de planilha",
@@ -163,7 +163,7 @@ export const PRODUTOS: Produto[] = [
       {
         pergunta: "Funciona na minha cidade?",
         resposta:
-          "Confirmamos a integração com a sua prefeitura logo depois da contratação. Por isso pedimos o município do escritório no pedido.",
+          "Confirmamos a integração com a sua prefeitura logo depois da contratação. Por isso pedimos o município do escritório no cadastro.",
       },
       {
         pergunta: "Posso trocar de plano depois?",

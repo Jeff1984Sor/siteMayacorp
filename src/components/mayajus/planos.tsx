@@ -1,17 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Minus } from "lucide-react";
-import { MAYAJUS_ACCENT as A } from "@/content/mayajus";
+import { MAYAJUS_ACCENT as A, linkCadastro } from "@/content/mayajus";
 import { PLANO_DESTAQUE, PLANOS, PRECO_USUARIO_ADICIONAL, type Ciclo, type Plano } from "@/content/mayajus-planos";
 import { economiaAnualPlano, formatarBRL, mensalEquivalente } from "@/lib/mayajus-preco";
 
-export function contratarHref(plano: string, ciclo: Ciclo, adicionais = 0) {
-  const q = new URLSearchParams({ plano, ciclo });
-  if (adicionais > 0) q.set("adicionais", String(adicionais));
-  return `/produtos/mayajus/contratar?${q}`;
+export function contratarHref(plano: string, ciclo: Ciclo) {
+  return linkCadastro(plano, ciclo);
 }
 
 export function CicloToggle({ ciclo, onChange, id }: { ciclo: Ciclo; onChange: (c: Ciclo) => void; id?: string }) {
@@ -160,13 +157,13 @@ function CardPlano({ plano, ciclo }: { plano: Plano; ciclo: Ciclo }) {
         <Item>Migração grátis no anual</Item>
       </ul>
 
-      <Link
+      <a
         href={contratarHref(plano.id, ciclo)}
         className={`mt-8 w-full ${destaque ? "btn-gold" : "btn-secondary"}`}
         aria-label={`Contratar o plano ${plano.nome} ${ciclo}`}
       >
         Contratar <ArrowRight className="h-4 w-4" aria-hidden />
-      </Link>
+      </a>
     </article>
   );
 }

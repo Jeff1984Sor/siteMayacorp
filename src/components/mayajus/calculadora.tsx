@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Lightbulb, Receipt, Users } from "lucide-react";
@@ -178,9 +177,9 @@ export function Calculadora({ ciclo }: { ciclo: Ciclo }) {
           )}
         </AnimatePresence>
 
-        <Link href={contratarHref(rec.plano.id, ciclo, rec.usuariosAdicionais)} className="btn-gold mt-7 w-full">
+        <a href={contratarHref(rec.plano.id, ciclo)} className="btn-gold mt-7 w-full">
           Contratar o {rec.plano.nome} <ArrowRight className="h-4 w-4" aria-hidden />
-        </Link>
+        </a>
         <p className="mt-3 text-center text-xs text-ink-muted">Notas excedentes são cobradas pelo uso, mês a mês.</p>
       </div>
     </div>

@@ -75,9 +75,9 @@ function CardDestaque({ p }: { p: Produto & { destaque: NonNullable<Produto["des
             <span className="font-display text-lg font-semibold text-ink">{p.destaque.preco}</span> {p.destaque.precoNota}
           </p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-            <Link href={p.destaque.contratarHref} className="btn-gold">
+            <a href={p.destaque.contratarHref} className="btn-gold">
               Contratar agora <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
+            </a>
             <Link href={p.destaque.planosHref} className="btn-secondary" aria-label={`Ver planos do ${p.nome}`}>
               Ver planos
             </Link>

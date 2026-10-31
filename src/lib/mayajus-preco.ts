@@ -1,14 +1,6 @@
-// Regras de preço do MayaJus — funções puras, usadas no navegador e recalculadas no servidor.
+// Regras de preço do MayaJus (calculadora e tabela) — funções puras.
 // Tudo é calculado em centavos (inteiros) para não haver erro de arredondamento.
-import {
-  MESES_ADICIONAL_NO_ANUAL,
-  MIGRACAO_MENSAL,
-  PLANOS,
-  PRECO_USUARIO_ADICIONAL,
-  type Ciclo,
-  type FaixaProcessos,
-  type Plano,
-} from "@/content/mayajus-planos";
+import { MESES_ADICIONAL_NO_ANUAL, PLANOS, PRECO_USUARIO_ADICIONAL, type Ciclo, type Plano } from "@/content/mayajus-planos";
 
 const c = (reais: number) => Math.round(reais * 100);
 const r = (centavos: number) => Math.round(centavos) / 100;
@@ -98,92 +90,6 @@ export function recomendarPlano(uso: Uso, planos: Plano[] = PLANOS): Recomendaca
         ? { comparadoCom: alternativa.plano, diferenca: r(c(alternativa.total) - c(recomendado.total)) }
         : null,
   };
-}
-
-// ---------------------------------------------------------------------------
-// Pedido (checkout) — o servidor sempre recalcula com esta função
-// ---------------------------------------------------------------------------
-
-export type EntradaPedido = {
-  plano: Plano;
-  ciclo: Ciclo;
-  usuariosAdicionais: number;
-  /** `null` = não há migração (cliente não usa nenhum sistema). */
-  faixaProcessos: FaixaProcessos | null;
-};
-
-export type ResumoPreco = {
-  ciclo: Ciclo;
-  /** Valor do plano cobrado no ciclo (mês ou ano). */
-  valorPlano: number;
-  /** Valor dos usuários adicionais cobrado no ciclo. */
-  valorAdicionais: number;
-  /** Total cobrado no ciclo (mês ou ano). */
-  totalCiclo: number;
-  /** Total por mês (no anual, o equivalente mensal). */
-  totalMensal: number;
-  /** Economia anual em relação ao mensal (0 no mensal). */
-  economia: number;
-  /** Custo da migração: 0 = grátis, `null` = sob orçamento ou não se aplica (ver `migracaoStatus`). */
-  migracao: number | null;
-  migracaoStatus: "gratis" | "cobrada" | "orcamento" | "nao-se-aplica";
-};
-
-export function calcularPedido(e: EntradaPedido): ResumoPreco {
-  const adicionais = Math.max(0, Math.floor(e.usuariosAdicionais));
-  const adicionalMesC = adicionais * c(PRECO_USUARIO_ADICIONAL);
-
-  let planoC: number;
-  let adicionaisC: number;
-  let economiaC = 0;
-
-  if (e.ciclo === "anual") {
-    planoC = c(e.plano.anual);
-    adicionaisC = adicionalMesC * MESES_ADICIONAL_NO_ANUAL;
-    economiaC = c(e.plano.mensal) * 12 + adicionalMesC * 12 - (planoC + adicionaisC);
-  } else {
-    planoC = c(e.plano.mensal);
-    adicionaisC = adicionalMesC;
-  }
-
-  const totalC = planoC + adicionaisC;
-
-  let migracao: number | null;
-  let migracaoStatus: ResumoPreco["migracaoStatus"];
-  if (e.faixaProcessos === null) {
-    migracao = null;
-    migracaoStatus = "nao-se-aplica";
-  } else if (e.ciclo === "anual") {
-    migracao = 0;
-    migracaoStatus = "gratis";
-  } else {
-    migracao = MIGRACAO_MENSAL[e.faixaProcessos];
-    migracaoStatus = migracao === null ? "orcamento" : migracao === 0 ? "gratis" : "cobrada";
-  }
-
-  return {
-    ciclo: e.ciclo,
-    valorPlano: r(planoC),
-    valorAdicionais: r(adicionaisC),
-    totalCiclo: r(totalC),
-    totalMensal: e.ciclo === "anual" ? r(totalC / 12) : r(totalC),
-    economia: r(Math.max(0, economiaC)),
-    migracao,
-    migracaoStatus,
-  };
-}
-
-export function migracaoTexto(p: Pick<ResumoPreco, "migracao" | "migracaoStatus">): string {
-  switch (p.migracaoStatus) {
-    case "gratis":
-      return "Grátis";
-    case "cobrada":
-      return formatarBRL(p.migracao ?? 0);
-    case "orcamento":
-      return "Sob orçamento";
-    default:
-      return "Não se aplica";
-  }
 }
 
 // ---------------------------------------------------------------------------

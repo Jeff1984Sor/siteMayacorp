@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { linkCadastro } from "@/content/mayajus";
 
 /** Barra "Contratar" fixa no rodapé do mobile, que aparece depois do hero e some na tabela de planos. */
 export function CtaFixo({ preco }: { preco: string }) {
@@ -37,9 +37,9 @@ export function CtaFixo({ preco }: { preco: string }) {
               MayaJus a partir de
               <span className="block font-display text-base font-semibold text-ink">{preco}</span>
             </p>
-            <Link href="/produtos/mayajus/contratar" className="btn-gold !py-2.5">
+            <a href={linkCadastro()} className="btn-gold !py-2.5">
               Contratar <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
+            </a>
           </div>
         </motion.div>
       )}

@@ -9,7 +9,7 @@ import { PrecosMayajus } from "@/components/mayajus/precos";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { Reveal } from "@/components/reveal";
 import { SpotlightCard } from "@/components/spotlight-card";
-import { MAYAJUS_ACCENT as A, MAYAJUS_HERO } from "@/content/mayajus";
+import { MAYAJUS_ACCENT as A, MAYAJUS_HERO, linkCadastro } from "@/content/mayajus";
 import { PLANOS } from "@/content/mayajus-planos";
 import { getProduto } from "@/content/produtos";
 import { formatarBRL, mensalEquivalente } from "@/lib/mayajus-preco";
@@ -54,7 +54,7 @@ export default function MayaJusPage() {
         name: `${pl.nome} — mensal`,
         price: pl.mensal.toFixed(2),
         priceCurrency: "BRL",
-        url: `${SITE_URL}/produtos/mayajus/contratar?plano=${pl.id}&ciclo=mensal`,
+        url: linkCadastro(pl.id, "mensal"),
         availability: "https://schema.org/InStock",
         priceSpecification: { "@type": "UnitPriceSpecification", price: pl.mensal.toFixed(2), priceCurrency: "BRL", unitCode: "MON" },
       },
@@ -63,7 +63,7 @@ export default function MayaJusPage() {
         name: `${pl.nome} — anual`,
         price: pl.anual.toFixed(2),
         priceCurrency: "BRL",
-        url: `${SITE_URL}/produtos/mayajus/contratar?plano=${pl.id}&ciclo=anual`,
+        url: linkCadastro(pl.id, "anual"),
         availability: "https://schema.org/InStock",
         priceSpecification: { "@type": "UnitPriceSpecification", price: pl.anual.toFixed(2), priceCurrency: "BRL", unitCode: "ANN" },
       },
@@ -117,12 +117,12 @@ export default function MayaJusPage() {
                 <a href="#planos" className="btn-secondary">
                   Ver planos
                 </a>
-                <Link href="/produtos/mayajus/contratar" className="btn-gold">
+                <a href={linkCadastro()} className="btn-gold">
                   Contratar agora <ArrowRight className="h-4 w-4" aria-hidden />
-                </Link>
+                </a>
               </div>
               <ul className="mt-7 flex animate-fade-up flex-wrap gap-x-5 gap-y-2 text-sm text-ink-muted [animation-delay:300ms]">
-                {[`A partir de ${aPartirDe}/mês no anual`, "Sem fidelidade no mensal", "Migração grátis no anual"].map((t) => (
+                {["Comece com teste grátis", `A partir de ${aPartirDe}/mês no anual`, "Sem fidelidade no mensal", "Migração grátis no anual"].map((t) => (
                   <li key={t} className="flex items-center gap-1.5">
                     <Check className="h-4 w-4 text-success" aria-hidden /> {t}
                   </li>
@@ -262,12 +262,12 @@ export default function MayaJusPage() {
                 Comece agora
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-ink">
-                Contrate em poucos minutos. A nossa equipe cuida da configuração da NFS-e e da migração com você.
+                Cadastre-se em poucos minutos e comece com teste grátis. A nossa equipe cuida da configuração da NFS-e e da migração com você.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                <Link href="/produtos/mayajus/contratar" className="btn-gold">
+                <a href={linkCadastro()} className="btn-gold">
                   Contratar o MayaJus <ArrowRight className="h-4 w-4" aria-hidden />
-                </Link>
+                </a>
                 <a href="#calculadora" className="btn-secondary">
                   Descobrir meu plano
                 </a>
